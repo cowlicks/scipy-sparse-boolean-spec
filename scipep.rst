@@ -20,7 +20,7 @@
 Abstract
 ========
 
-This SciPEP describes how the sparse package handles boolean data typed
+This document describes how the sparse package handles boolean data typed
 sparse matrices. 
 
 
@@ -31,14 +31,33 @@ Rationale
 General
 -------
 
+Boolean Operations
+------------------
 
-Footnotes
----------
+For sparse matrices A, B and sparse matrix type spmatrix, we have for all
+boolean operations::
+
+     boolean_op(A, B)
+
+is fully equivalent to::
+
+    spmatrix(boolean_op(A.todense(), B.todense()))
+
+This has the drawback of making `==`, `<=`, `>=` useless in many cases
+because a matrix mostly populated with `True` values is returned.
+[1]_
+
+However this can be avoided by using the inverse of the typical
+operation. For example if A and B are thought to be mostly equal
+instead of checking with `A == B`, you can apply the inverse and
+check that it is empty `A != B`.
 
 
 References
 ==========
 
+.. [1] Pauli Virtanen, Sparse boolean specification, Scipy-dev mailing list
+    (http://article.gmane.org/gmane.comp.python.scientific.devel/17605)
 
 Copyright
 =========
