@@ -52,12 +52,12 @@ operation. For example if A and B are thought to be mostly equal
 instead of checking with `A == B`, you can apply the inverse and
 check that it is empty `A != B`.
 
-For sparse matreces you will expect:
+For sparse matreces you will expect::
 
-    mostly `True`:        mostly `False`:
-    `A == B`            `A != B`
-    `A >= B`            `A > B`
-    `A <= B`            `A < B`
+    mostly True:        mostly False:
+    A == B              A != B
+    A >= B              A > B
+    A <= B              A < B
 
 You should try to only use mostly `False` operations.
 
