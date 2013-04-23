@@ -23,21 +23,32 @@ Abstract
 This document describes how the sparse package handles boolean data typed
 sparse matrices. 
 
-
-Rationale
-=========
-
 General
 -------
 
+Rationale
+=========
 
 General Binary Operations
 -------------------------
 The goal is to have functional parity with numpy's ndarray and matrix
 objects.
 
-With Scalars or vectors
-'''''''''''''''''''''''
+Things that are treated like:
+
+scalars:
+''''''''
+Operations with these are +, -, \*, \\
+they return a sparse matrix where the scalar and operation are prefomed
+to each entry.
+
+- single element numpy ndarray/matrix
+- single element sparse matrices
+- single element lists, tuples
+- python int, float, bool
+
+vectors:
+''''''''
 
 You can perform any boolean operation between a sparce matrix and any 
 type you would be able to with numpy. If the sparse matrix is of size
@@ -48,6 +59,34 @@ list, tuple, 1D vector all of length M, or a 2D matrix or array of size
 When a sparse matrix is compared with one of these vector like things,
 the vector is broadcast such that each column of the matrix is compared
 with the corresponding element in the vector.
+For a NxM matrix (row major)
+
++, -, \*, \\
+
+these are broadcast such that each element in the vector operates
+each element in the corresponding column of the matrix.
+
+- ndim = 2, size = (1,M)
+- ndim = 1, size = (M,)
+- length M python lists and tuples
+
+matrices:
+'''''''''
+Matrix multiplication and element wise multiplication.
+
+- numpy ndarrays and matrices
+- sparse matrices
+
+Things here are more idiosyncratic depending on the type of sparse
+matrix used. 
+
+Developers should prioritize implementing features on 
+
+csc, csr > lil >> all others
+
+csc and csr are the most full featured.
+
+complete feature set for a matrix type should include: ...
 
 With numpy ndarrays or matrices
 '''''''''''''''''''''''''''''''
