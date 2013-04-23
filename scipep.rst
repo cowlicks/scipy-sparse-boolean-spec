@@ -52,6 +52,36 @@ operation. For example if A and B are thought to be mostly equal
 instead of checking with `A == B`, you can apply the inverse and
 check that it is empty `A != B`.
 
+For sparse matreces you will expect:
+
+    mostly `True`:        mostly `False`:
+    `A == B`            `A != B`
+    `A >= B`            `A > B`
+    `A <= B`            `A < B`
+
+You should try to only use mostly `False` operations.
+
+With Scalars or vectors
+'''''''''''''''''''''''
+
+You can perform any boolean operation between a sparce matrix and any 
+type you would be able to with numpy. If the sparse matrix is of size
+NxM (row major) you can compare it with things that are vector like a 
+list, tuple, 1D vector all of length M, or a 2D matrix or array of size
+1xM, as well as scalars.
+
+When a sparse matrix is compared with one of these vector like things,
+the vector is broadcast such that each column of the matrix is compared
+with the corresponding element in the vector.
+
+With numpy ndarrays or matrices
+'''''''''''''''''''''''''''''''
+
+When comparing sparce matricies with numpy arrays or matrices the 
+sparse matrix is converted to a dense array or matrix and compared. So
+a dense array or matrix is returned. 
+
+
 
 References
 ==========
