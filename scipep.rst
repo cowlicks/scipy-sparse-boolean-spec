@@ -16,90 +16,20 @@
     Created: 21-Apr-2013
     Post-History: 21-Apr-2013
 
+Boolean Specification
+=====================
 
 Abstract
-========
+--------
 
-This document describes how the sparse package handles boolean data typed
-sparse matrices. 
-
-General
--------
-
-Rationale
-=========
-
-General Binary Operations
--------------------------
-The goal is to have functional parity with numpy's ndarray and matrix
-objects.
-
-Things that are treated like:
-
-scalars:
-''''''''
-Operations with these are +, -, \*, \\
-they return a sparse matrix where the scalar and operation are prefomed
-to each entry.
-
-- single element numpy ndarray/matrix
-- single element sparse matrices
-- single element lists, tuples
-- python int, float, bool
-
-vectors:
-''''''''
-
-You can perform any boolean operation between a sparce matrix and any 
-type you would be able to with numpy. If the sparse matrix is of size
-NxM (row major) you can compare it with things that are vector like a 
-list, tuple, 1D vector all of length M, or a 2D matrix or array of size
-1xM, as well as scalars.
-
-When a sparse matrix is compared with one of these vector like things,
-the vector is broadcast such that each column of the matrix is compared
-with the corresponding element in the vector.
-For a NxM matrix (row major)
-
-+, -, \*, \\
-
-these are broadcast such that each element in the vector operates
-each element in the corresponding column of the matrix.
-
-- ndim = 2, size = (1,M)
-- ndim = 1, size = (M,)
-- length M python lists and tuples
-
-matrices:
-'''''''''
-Matrix multiplication and element wise multiplication.
-
-- numpy ndarrays and matrices
-- sparse matrices
-
-Things here are more idiosyncratic depending on the type of sparse
-matrix used. 
-
-Developers should prioritize implementing features on 
-
-csc, csr > lil >> all others
-
-csc and csr are the most full featured.
-
-complete feature set for a matrix type should include: ...
-
-With numpy ndarrays or matrices
-'''''''''''''''''''''''''''''''
-
-When comparing sparce matricies with numpy arrays or matrices the 
-sparse matrix is converted to a dense array or matrix and compared. So
-a dense array or matrix is returned. 
+This document describes how the sparse package boolean operations  
+handles boolean data typed sparse matrices.
 
 
 Boolean Operations
 ------------------
 
-For sparse matrices A, B and sparse matrix type spmatrix, we have for all
+For sparse matrices `A` and `B`, of any type, of the same size, we have for all
 boolean operations::
 
      boolean_op(A, B)
@@ -127,15 +57,44 @@ For sparse matreces you will expect::
 You should try to only use mostly `False` operations.
 
 
+Sparse and Dense Mixing
+'''''''''''''''''''''''
+
+When comparing mixed sparse dense matrices, a dense matrix is returned.
+For exapmle if `A` is sparse and `D` is dense, `boolean_op(A, B)` is 
+fully equivalent to::
+
+    boolean_op(A.todense(), D)
+
+However returning a dense matrix is not always optimal. Like in cases 
+where `D` is not the same size as `A` and broadcasting_ occurs. In
+cases like these a sparse matrix could be efficiently returned.
+
+.. _broadcasting: http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html
+
+Broadcasting
+''''''''''''
+
+Boolean operations broadcast in the same way as NumPy. Info can be
+found in the `NumPy docs`_.
+
+.. _`NumPy docs`: http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html
+
+dtype=bool spmatrices
+---------------------
+
+Sparse matrices can have `dtype=bool`. So each element is represented
+either `True` or `False`. 
+
 
 References
-==========
+''''''''''
 
 .. [1] Pauli Virtanen, Sparse boolean specification, Scipy-dev mailing list
     (http://article.gmane.org/gmane.comp.python.scientific.devel/17605)
 
 Copyright
-=========
+'''''''''
 
 This document has been placed in the public domain.
 
