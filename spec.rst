@@ -80,11 +80,11 @@ found in the `NumPy docs`_.
 
 .. _`NumPy docs`: http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html
 
-dtype=bool spmatrices
----------------------
+`dtype=bool` spmatrices
+-----------------------
 
-Sparse matrices can have `dtype=bool`. So each element is represented
-either `True` or `False`. 
+A sparse matrices with `dtype=bool` has each element represented as 
+either `True` or `False`. Sparse matrices consider `True` as nonzero.  
 
 
 References
