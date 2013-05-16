@@ -23,7 +23,8 @@ Boolean Specification
 Abstract
 ========
 
-This document describes how the sparse package handles boolean operations and boolean data typed sparse matrices.
+This document describes how the sparse package handles boolean operations and
+boolean data typed sparse matrices.
 
 
 Boolean Operations
@@ -73,7 +74,7 @@ Mixing sparse matrices with other types, including dense matrices
 -----------------------------------------------------------------
 
 When applying some boolean operation (`boolean_op`) to a sparse matrix
-(`A`) and some arbitrary variable (`B`) what basically happens is::
+(`A`) and some arbitrary variable (`B`) what basically happens is:: 
 
     def boolean_op(A, B):
         ...
@@ -117,8 +118,8 @@ Testing `dtype=bool` matrices is tacked on to existing tests,
 this is because there is currently no way to input general data into the
 test suite. 
 
-Testing booling operations works by taking some data, in the form of
-sevreral sparse and dense matrices then trying every permutation of two
+Testing boolean operations works by taking some data, in the form of
+several sparse and dense matrices then trying every permutation of two
 of them with every boolean operation.
 
 References
