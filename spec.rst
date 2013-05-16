@@ -22,8 +22,7 @@ Boolean Specification
 Abstract
 --------
 
-This document describes how the sparse package boolean operations  
-handles boolean data typed sparse matrices.
+This document describes how the sparse package handles boolean operations and boolean data typed sparse matrices.
 
 
 Boolean Operations
