@@ -16,24 +16,37 @@
     Created: 21-Apr-2013
     Post-History: 21-Apr-2013
 
+=====================
 Boolean Specification
 =====================
 
 Abstract
---------
+========
 
 This document describes how the sparse package handles boolean operations and boolean data typed sparse matrices.
 
 
 Boolean Operations
-------------------
+==================
 
 For sparse matrices `A` and `B`, of any type, of the same size, we have for all
-boolean operations::
+boolean operations something like::
 
-     boolean_op(A, B)
+     def boolean_op(A, B):
+        ...
+        if issparse(B):
+            if A.shape == B.shape:
+                # Sparse matrix is returned.
+                return sparse_boolean_op(A, B)
+            elif broadcastable(A, B):
+                # Broad cast the operation elementwise onto the sparse
+                # matrix, and return the sparse matrix.
+                return sparse_broadcast_boolean_op(A, B)
+            else:
+                return False
+        ...
 
-is fully equivalent to::
+Tl;dr this is fully equivalent to::
 
     spmatrix(boolean_op(A.todense(), B.todense()))
 
@@ -42,11 +55,11 @@ because a matrix mostly populated with `True` values is returned.
 [1]_
 
 However this can be avoided by using the inverse of the typical
-operation. For example if A and B are thought to be mostly equal
-instead of checking with `A == B`, you can apply the inverse and
-check that it is empty `A != B`.
+operation. For example if `A` and `B` are thought to be mostly equal
+instead of checking with `A == B`, you can apply the inverse (`A != B`)
+and check that it is empty.
 
-For sparse matreces you will expect::
+For sparse matrices you will expect::
 
     mostly True:        mostly False:
     A == B              A != B
@@ -56,23 +69,35 @@ For sparse matreces you will expect::
 You should try to only use mostly `False` operations.
 
 
-Sparse and Dense Mixing
-'''''''''''''''''''''''
+Mixing sparse matrices with other types, including dense matrices
+-----------------------------------------------------------------
 
-When comparing mixed sparse dense matrices, a dense matrix is returned.
-For exapmle if `A` is sparse and `D` is dense, `boolean_op(A, B)` is 
-fully equivalent to::
+When applying some boolean operation (`boolean_op`) to a sparse matrix
+(`A`) and some arbitrary variable (`B`) what basically happens is::
 
-    boolean_op(A.todense(), D)
+    def boolean_op(A, B):
+        ...
+        if isdense(B):
+            if A.shape == B.shape:
+                # A can probably be represented efficiently as a sparse
+                # matrix, since B can be.
+                return boolean_op(A.todense(), B)
+            elif broadcastable(A, B):
+                # Broadcast, and return the sparse matrix.
+                return sparse_broadcast_boolean_op(A, spmatrix(B))
+            else:
+                return False
+        # Comparing two dissimilar things.
+        else:
+            return False
+        ...
 
-However returning a dense matrix is not always optimal. Like in cases 
-where `D` is not the same size as `A` and broadcasting_ occurs. In
-cases like these a sparse matrix could be efficiently returned.
-
-.. _broadcasting: http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html
+So when operating on sparse and dense matrices simultaneously three
+things could possibly be returned: A sparse matrix, dense matrix, or
+`False`.  This depends on the shapes of the matrices being compared.
 
 Broadcasting
-''''''''''''
+------------
 
 Boolean operations broadcast in the same way as NumPy. Info can be
 found in the `NumPy docs`_.
@@ -80,20 +105,30 @@ found in the `NumPy docs`_.
 .. _`NumPy docs`: http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html
 
 `dtype=bool` spmatrices
------------------------
+=======================
 
 A sparse matrices with `dtype=bool` has each element represented as 
 either `True` or `False`. Sparse matrices consider `True` as nonzero.  
 
+Tests
+=====
+
+Testing `dtype=bool` matrices is tacked on to existing tests,
+this is because there is currently no way to input general data into the
+test suite. 
+
+Testing booling operations works by taking some data, in the form of
+sevreral sparse and dense matrices then trying every permutation of two
+of them with every boolean operation.
 
 References
-''''''''''
+----------
 
 .. [1] Pauli Virtanen, Sparse boolean specification, Scipy-dev mailing list
     (http://article.gmane.org/gmane.comp.python.scientific.devel/17605)
 
 Copyright
-'''''''''
+---------
 
 This document has been placed in the public domain.
 
