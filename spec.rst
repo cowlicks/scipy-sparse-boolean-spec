@@ -136,7 +136,7 @@ to::
             yield self.check_something, dtype
         ...
 
-As suggested by the parametric testing section of the NumPy docs[2]_
+As suggested by the parametric testing section of the NumPy docs [2]_
 This isn't done for every test, just where it makes sense that boolean
 data should be tested.
 
