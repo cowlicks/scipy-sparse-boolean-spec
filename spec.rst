@@ -146,7 +146,7 @@ References
 .. [1] Pauli Virtanen, Sparse boolean specification, Scipy-dev mailing list
     (http://article.gmane.org/gmane.comp.python.scientific.devel/17605)
 
-.. [2] NumPy docs, Testing Guidelines, 
+.. [2] NumPy docs, Testing Guidelines,  
     (https://github.com/numpy/numpy/blob/master/doc/TESTS.rst.txt#id6)
 
 Copyright
