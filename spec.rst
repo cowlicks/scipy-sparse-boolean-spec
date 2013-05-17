@@ -114,19 +114,40 @@ either `True` or `False`. Sparse matrices consider `True` as nonzero.
 Tests
 =====
 
-Testing `dtype=bool` matrices is tacked on to existing tests,
-this is because there is currently no way to input general data into the
-test suite. 
-
 Testing boolean operations works by taking some data, in the form of
 several sparse and dense matrices then trying every permutation of two
 of them with every boolean operation.
+
+Testing `dtype=bool` matrices is tacked on to existing tests, this is
+because there is currently no way to input general data into the test
+suite. This is done by changing previously existing tests, for example::
+    
+    def test_something(self):
+        ...
+        mat = self.spmatrix(data)
+        ...
+to::
+    
+    def check_something(self, dtype):
+        mat = self.spmatrix(data, dtype=dtype)
+        ...
+    def test_something(self):
+        for dtype in supported_dtypes:
+            yield self.check_something, dtype
+        ...
+
+As suggested by the parametric testing section of the NumPy docs[2]_
+This isn't done for every test, just where it makes sense that boolean
+data should be tested.
 
 References
 ----------
 
 .. [1] Pauli Virtanen, Sparse boolean specification, Scipy-dev mailing list
     (http://article.gmane.org/gmane.comp.python.scientific.devel/17605)
+
+.. [2] NumPy docs, Testing Guidelines, 
+    (https://github.com/numpy/numpy/blob/master/doc/TESTS.rst.txt#id6)
 
 Copyright
 ---------
