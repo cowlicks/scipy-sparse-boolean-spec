@@ -80,7 +80,7 @@ When applying some boolean operation (`boolean_op`) to a sparse matrix
         ...
         if isdense(B):
             if A.shape == B.shape:
-                # A can probably be represented efficiently as a sparse
+                # A can probably be represented efficiently as a dense
                 # matrix, since B can be.
                 return boolean_op(A.todense(), B)
             elif broadcastable(A, B):
